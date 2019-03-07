@@ -48,6 +48,9 @@ public class LogUtil {
 //
 //        Configurator.initialize(builder.build());
 //    }
+
+    public static Logger agentLogger = null;
+
     static {
         ConfigurationBuilder<BuiltConfiguration> builder = ConfigurationBuilderFactory.newConfigurationBuilder();
 
@@ -59,7 +62,9 @@ public class LogUtil {
 
 
         FilterComponentBuilder threadFilter = builder.newFilter("RegexFilter", Filter.Result.ACCEPT, Filter.Result.DENY);
-        threadFilter.addAttribute("regex", ".*INFO.*");
+//        threadFilter.addAttribute("regex", ".*INFO.*");
+        threadFilter.addAttribute("level", "INFO");
+
 
         AppenderComponentBuilder fileAppenderBuilder = builder.newAppender("rolling", "RollingFile");
         fileAppenderBuilder.addAttribute("fileName", "target/rolling.log");
@@ -70,7 +75,7 @@ public class LogUtil {
         builder.add(fileAppenderBuilder);
 
         FilterComponentBuilder errorFilter = builder.newFilter("ThresholdFilter", Filter.Result.ACCEPT, Filter.Result.DENY);
-        threadFilter.addAttribute("level", "ERROR");
+        errorFilter.addAttribute("level", "ERROR");
         AppenderComponentBuilder errorAppenderBuilder = builder.newAppender("error", "RollingFile");
         errorAppenderBuilder.addAttribute("fileName", "target/error.log");
         errorAppenderBuilder.addAttribute("filePattern", "target/archive/error-%d{MM-dd-yy}.log.gz");
@@ -80,12 +85,15 @@ public class LogUtil {
 
         builder.add(errorAppenderBuilder);
 
-        builder.add( builder.newRootLogger( Level.DEBUG )
+        builder.add( builder.newRootLogger( Level.INFO )
                 .add( builder.newAppenderRef( "rolling" ) )
                 .add( builder.newAppenderRef( "error" ) )
         );
 
         Configurator.initialize(builder.build());
+        agentLogger = LogManager.getLogger(LogUtil.class);
+        agentLogger.info("test  agentLogger");
+        agentLogger.error("test error agentLogger");
     }
 
     public static Logger getLogger(Class c){

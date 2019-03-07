@@ -23,7 +23,7 @@ public class FileLogTest {
         FileLogSub fileLogSub = new FileLogSub();
         fileLogSub.test();
 
-        Logger logger=LogUtil.getLogger(FileLogSub.class);
+        Logger logger=LogUtil.getLogger(FileLogTest.class);
         logger.error("HELLO_WORLD");
         logger.info("INFO");
         logger.debug("testdebug");

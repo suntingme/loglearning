@@ -7,6 +7,6 @@ public class FileLogSub {
 
     public void test(){
         logger.info("sub INFO");
-        logger.info("INFO");
+        logger.error("sub ERROR");
     }
 }
